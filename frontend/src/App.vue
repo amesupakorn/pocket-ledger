@@ -1,7 +1,7 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <HelloWorld />
+  <div class="h-screen flex items-center justify-center bg-gray-100">
+    <h1 class="text-3xl font-bold text-blue-500">
+      Tailwind
+    </h1>
+  </div>
 </template>
