@@ -15,7 +15,7 @@ func NewCategoryRepository() *CategoryRepository {
 
 func (r *CategoryRepository) GetAll(ctx context.Context) ([]dto.CategoryResponse, error) {
 	rows, err := database.DB.Query(ctx, `
-		SELECT id, name, type, created_at
+		SELECT id, name, type, created_at, key
 		FROM categories
 		ORDER BY id
 	`)
@@ -35,6 +35,7 @@ func (r *CategoryRepository) GetAll(ctx context.Context) ([]dto.CategoryResponse
 			&c.Name,
 			&c.Type,
 			&c.CreatedAt,
+			&c.Key,
 		)
 
 		if err != nil {

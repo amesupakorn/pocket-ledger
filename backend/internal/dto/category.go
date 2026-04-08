@@ -7,4 +7,5 @@ type CategoryResponse struct {
 	Name      string    `json:"name"`
 	Type      string    `json:"type"`
 	CreatedAt time.Time `json:"created_at"`
+	Key       string    `json:"key"`
 }

@@ -22,6 +22,7 @@ type Category struct {
 	Name      string
 	Type      string
 	CreatedAt time.Time
+	key       string
 }
 
 type Transaction struct {
