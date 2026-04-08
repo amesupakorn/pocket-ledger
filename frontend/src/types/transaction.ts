@@ -16,3 +16,12 @@ export interface Transaction {
   type: TransactionType
   createdAt: string
 }
+
+export interface TransactionwithCKey {
+  id: number
+  amount: number
+  type: string
+  note: string
+  created_at: string
+  category_key: string
+}

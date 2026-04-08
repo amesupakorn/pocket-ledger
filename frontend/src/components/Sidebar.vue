@@ -18,8 +18,6 @@ const menus = [
 
 const isActive = (path: string) => route.path === path
 
-const emit = defineEmits(['add'])
-
 </script>
 
 <template>
@@ -43,24 +41,13 @@ const emit = defineEmits(['add'])
             ? 'bg-green-100 text-green-700'
             : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'"
         >
-          <!-- icon -->
           <component :is="item.icon" class="w-5 h-5" />
 
-          <!-- text -->
           <span>{{ item.name }}</span>
         </router-link>
       </nav>
     </div>
 
-    <!-- Bottom -->
-    <div class="p-4">
-      <button
-        @click="emit('add')"
-        class="w-full bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-xl font-medium transition shadow-sm"
-      >
-        + Add Transaction
-      </button>
-    </div>
 
   </aside>
 </template>

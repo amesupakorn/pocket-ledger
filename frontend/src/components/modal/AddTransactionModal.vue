@@ -1,21 +1,83 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { expenseCategories, incomeCategories } from '@/constants/categories'
+import { ref, computed, onMounted } from 'vue'
+import { categoryMap } from '@/constants/categories'
 import AmountKeypad from '../keypad/AmountKeypad.vue'
 import CategoryDropdown from '../dropdown/CategoryDropdown.vue'
 import DatePicker from '../picker/DatePicker.vue'
+import { api } from '@/services/api'
+import { useCategories } from '@/composables/useCategories'
 
 defineProps<{
   open: boolean
 }>()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'create'])
 
 const type = ref<'expense' | 'income'>('expense')
 
+const loading = ref(false)
+
+const { mapCategories, loadingCate } = useCategories()
+
 const categories = computed(() =>
-  type.value === 'expense' ? expenseCategories : incomeCategories
+  mapCategories(type.value)
 )
+const amount = ref(0)
+const selectedCategory = ref<any>(null)
+const note = ref('')
+const walletId = 1
+const selectedDate = ref<Date | null>(new Date())
+//call api
+
+const handleAmountUpdate = (v: string) => {
+  amount.value = Number(v)
+}
+
+const handleDateUpdate = (d: Date) => {
+  selectedDate.value = d
+}
+
+const handleCategorySelect = (c: any) => {
+  selectedCategory.value = c
+}
+
+const  createTransaction = async () => {
+    try{
+        if(!selectedCategory.value) {
+            alert('Please select catrgory')
+            return
+        }
+
+        if(amount.value <= 0){
+            alert("Please input your amount")
+            return
+        }
+
+        loading.value = true
+
+        const res = await api.post('/create/transaction', {
+            wallet_id: walletId,
+            category_id: selectedCategory.value.id,
+            amount: amount.value,
+            type: type.value,
+            note: note.value,
+            created_at: selectedDate.value?.toISOString(),
+        })
+
+        emit('create', res.data.data)
+        
+        amount.value = 0
+        note.value = ''
+        selectedCategory.value = null
+        emit('close')
+
+    } catch (err) {
+        console.error(err)
+        alert('Error saving transactions')
+    } finally {
+        loading.value = false
+    }
+}
 
 </script>
 
@@ -43,8 +105,7 @@ const categories = computed(() =>
       <!-- amount -->
       <div class="bg-gray-100 rounded-xl p-4 text-center mb-4">
         <p class="text-sm text-gray-500">TRANSACTION AMOUNT</p>
-         <AmountKeypad @update="(v) => console.log(v)" />
-
+         <AmountKeypad @update="handleAmountUpdate" />
       </div>
 
       <!-- type -->
@@ -77,28 +138,33 @@ const categories = computed(() =>
       <!-- category -->
        <CategoryDropdown
             :categories="categories"
-            @select="(c) => console.log(c)"
+            @select="handleCategorySelect"
         />
 
 
       <!-- date -->
-       <DatePicker />
+       <DatePicker @update="handleDateUpdate" />
 
 
       <!-- note -->
-      <div class="mb-4">
+      <div class="mb-4 mt-1">
         <label class="text-xs text-gray-500">NOTE</label>
         <input
+          v-model="note"
           type="text"
           placeholder="What was this for?"
-          class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1"
+          class="w-full border border-gray-200 bg-white rounded-xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:border-gray-300 transition"
+
         />
       </div>
 
       <!-- actions -->
       <div class="flex gap-2">
-        <button class="flex-1 bg-green-600 text-white py-2 rounded-lg">
-          Save Transaction
+        <button 
+          @click="createTransaction"
+          :disabled="loading"
+          class="flex-1 bg-green-600 text-white py-2 rounded-lg">
+          {{ loading ? 'Create....' : 'Create Transaction' }}
         </button>
         <button
           @click="emit('close')"

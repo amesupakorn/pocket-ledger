@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps<{
   categories: any[]
@@ -18,34 +18,63 @@ const selectItem = (item: any) => {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative w-full">
     
     <!-- trigger -->
     <button
       @click="open = !open"
-      class="w-full border rounded-lg border-gray-300 px-3 py-2 flex items-center justify-between"
+      class="w-full border border-gray-200 bg-white rounded-xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:border-gray-300 transition"
     >
       <div v-if="selected" class="flex items-center gap-2">
-        <component :is="selected.icon" class="w-4 h-4" />
-        <span>{{ selected.label }}</span>
+        <div
+          class="p-1.5 rounded-md"
+          :class="selected.color"
+        >
+          <component :is="selected.icon" class="w-4 h-4" />
+        </div>
+        <span class="font-medium text-gray-800">
+          {{ selected.label }}
+        </span>
       </div>
-      <span v-else class="text-gray-400">Select category</span>
+
+      <span v-else class="text-gray-400">
+        Select category
+      </span>
+
+      <!-- arrow -->
+      <svg
+        class="w-4 h-4 text-gray-400 ml-2"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M19 9l-7 7-7-7" />
+      </svg>
     </button>
 
     <!-- dropdown -->
     <transition name="fade">
       <div
         v-if="open"
-        class="absolute mt-1 w-full bg-white border rounded-lg shadow z-10"
+        class="absolute mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg z-10 overflow-hidden"
       >
         <div
           v-for="item in categories"
           :key="item.value"
           @click="selectItem(item)"
-          class="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+          class="flex items-center gap-3 px-4 py-2.5 cursor-pointer transition hover:bg-gray-50"
         >
-          <component :is="item.icon" class="w-4 h-4" />
-          <span>{{ item.label }}</span>
+          <div
+            class="p-1.5 rounded-md"
+            :class="item.color"
+          >
+            <component :is="item.icon" class="w-4 h-4" />
+          </div>
+
+          <span class="text-gray-700 font-medium">
+            {{ item.label }}
+          </span>
         </div>
       </div>
     </transition>
@@ -60,10 +89,10 @@ const selectItem = (item: any) => {
 }
 .fade-enter-from {
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 </style>
