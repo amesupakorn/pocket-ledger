@@ -18,10 +18,10 @@ type Wallet struct {
 }
 
 type Category struct {
-	ID     int64
-	UserID int64
-	Name   string
-	Type   string
+	ID        int64
+	Name      string
+	Type      string
+	CreatedAt time.Time
 }
 
 type Transaction struct {

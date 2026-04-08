@@ -10,6 +10,7 @@ func SetupRouter() *gin.Engine {
 	r.Use(cors.Default())
 	// routes
 	TransactionRoute(r)
+	CategoryRoute(r)
 
 	return r
 }

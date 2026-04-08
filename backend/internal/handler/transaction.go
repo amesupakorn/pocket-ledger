@@ -1,7 +1,6 @@
-package handlers
+package handler
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
