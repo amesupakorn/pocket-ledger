@@ -1,15 +1,22 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"log"
+
+	"github.com/amesupakorn/pocket-ledger/internal/database"
+	"github.com/amesupakorn/pocket-ledger/internal/routes"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	r := gin.Default()
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found")
+	}
 
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "ok"})
-	})
+	database.Connect()
+
+	r := routes.SetupRouter()
 
 	r.Run(":8080")
 }
