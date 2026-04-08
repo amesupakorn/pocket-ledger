@@ -20,6 +20,6 @@ type TransactionResponse struct {
 }
 
 type UpdateTransactionRequest struct {
-	Amount float32 `json:"amount"`
+	Amount float64 `json:"amount"`
 	Note   string  `json:"note"`
 }

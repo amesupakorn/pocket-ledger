@@ -53,7 +53,7 @@ func (h *TransactionHandler) GetTransactions(c *gin.Context) {
 }
 
 func (h *TransactionHandler) DeleteTransaction(c *gin.Context) {
-	idParam := c.Query("id")
+	idParam := c.Param("id")
 
 	id, _ := strconv.ParseInt(idParam, 10, 64)
 
@@ -67,11 +67,11 @@ func (h *TransactionHandler) DeleteTransaction(c *gin.Context) {
 }
 
 func (h *TransactionHandler) UpdateTransaction(c *gin.Context) {
-	idParam := c.Params("id")
+	idParam := c.Param("id")
 
 	id, _ := strconv.ParseInt(idParam, 10, 64)
 
-	var req UpdateTransactionRequest
+	var req dto.UpdateTransactionRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return

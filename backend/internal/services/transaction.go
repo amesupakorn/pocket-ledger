@@ -111,7 +111,7 @@ func (s *TransactionService) DeleteTransaction(
 	return nil
 }
 
-func (s *TransactionService) UpdateTransactions(
+func (s *TransactionService) UpdateTransaction(
 	ctx context.Context,
 	id int64,
 	amount float64,
