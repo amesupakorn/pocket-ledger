@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/amesupakorn/pocket-ledger/internal/database"
 	"github.com/amesupakorn/pocket-ledger/internal/dto"
@@ -36,6 +37,14 @@ func (s *TransactionService) CreateTransaction(
 		return 0, errors.New("invalid type")
 	}
 
+	//manage createat
+	var createdAt time.Time
+	if req.CreatedAt != nil {
+		createdAt = *req.CreatedAt
+	} else {
+		createdAt = time.Now()
+	}
+
 	// insert transaction
 	id, err := s.repo.CreateTx(
 		ctx, tx,
@@ -45,6 +54,7 @@ func (s *TransactionService) CreateTransaction(
 		req.Amount,
 		req.Type,
 		req.Note,
+		createdAt,
 	)
 	if err != nil {
 		return 0, err

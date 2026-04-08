@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/amesupakorn/pocket-ledger/internal/database"
 	"github.com/amesupakorn/pocket-ledger/internal/dto"
@@ -22,16 +23,17 @@ func (r *TransactionRepository) CreateTx(
 	amount float64,
 	tType string,
 	note string,
+	createdAt time.Time,
 ) (int64, error) {
 
 	var id int64
 
 	err := tx.QueryRow(ctx, `
 		INSERT INTO transactions
-		(user_id, wallet_id, category_id, amount, type, note)
-		VALUES ($1,$2,$3,$4,$5,$6)
+		(user_id, wallet_id, category_id, amount, type, note, created_at)
+		VALUES ($1,$2,$3,$4,$5,$6,$7)
 		RETURNING id
-	`, userID, walletID, categoryID, amount, tType, note).Scan(&id)
+	`, userID, walletID, categoryID, amount, tType, note, createdAt).Scan(&id)
 
 	return id, err
 }

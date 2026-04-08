@@ -9,8 +9,8 @@ func TransactionRoute(r *gin.Engine) {
 
 	h := handlers.NewTransactionHandler()
 
-	r.POST("/create/transactions", h.CreateTransaction)
+	r.POST("/create/transaction", h.CreateTransaction)
 	r.GET("/transactions", h.GetTransactions)
-	r.PUT("/transactions/:id", h.UpdateTransaction)
-	r.DELETE("/transactions/:id", h.DeleteTransaction)
+	r.PUT("/transaction/:id", h.UpdateTransaction)
+	r.DELETE("/transaction/:id", h.DeleteTransaction)
 }
