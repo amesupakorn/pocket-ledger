@@ -11,5 +11,6 @@ func TransactionRoute(r *gin.Engine) {
 
 	r.POST("/create/transactions", h.CreateTransaction)
 	r.GET("/transactions", h.GetTransactions)
-
+	r.PUT("/transactions", h.UpdateTransaction)
+	r.DELETE("/transactions", h.DeleteTransaction)
 }

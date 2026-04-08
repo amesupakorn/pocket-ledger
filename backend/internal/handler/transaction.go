@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/amesupakorn/pocket-ledger/internal/dto"
 	"github.com/amesupakorn/pocket-ledger/internal/services"
@@ -49,4 +50,37 @@ func (h *TransactionHandler) GetTransactions(c *gin.Context) {
 	}
 
 	c.JSON(200, data)
+}
+
+func (h *TransactionHandler) DeleteTransaction(c *gin.Context) {
+	idParam := c.Query("id")
+
+	id, _ := strconv.ParseInt(idParam, 10, 64)
+
+	err := h.service.DeleteTransaction(c.Request.Context(), id)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "deleted"})
+}
+
+func (h *TransactionHandler) UpdateTransaction(c *gin.Context) {
+	idParam := c.Params("id")
+
+	id, _ := strconv.ParseInt(idParam, 10, 64)
+
+	var req UpdateTransactionRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := h.service.UpdateTransaction(c.Request.Context(), id, req.Amount, req.Note)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+	}
+
+	c.JSON(200, gin.H{"message": "updated"})
 }

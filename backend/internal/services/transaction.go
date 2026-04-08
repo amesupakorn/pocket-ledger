@@ -73,7 +73,7 @@ func (s *TransactionService) GetTransactions(ctx context.Context) ([]dto.Transac
 	return s.repo.GetAll(ctx)
 }
 
-func (s *TransactionService) DelTransaction(
+func (s *TransactionService) DeleteTransaction(
 	ctx context.Context,
 	id int64,
 ) error {

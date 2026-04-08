@@ -18,3 +18,8 @@ type TransactionResponse struct {
 	Note      string    `json:"note"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+type UpdateTransactionRequest struct {
+	Amount float32 `json:"amount"`
+	Note   string  `json:"note"`
+}
