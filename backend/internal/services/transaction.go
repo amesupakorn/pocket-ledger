@@ -24,17 +24,17 @@ func (s *TransactionService) CreateTransaction(
 	ctx context.Context,
 	userID int64,
 	req dto.CreateTransactionRequest,
-) (int64, error) {
+) (*dto.TransactionResponse, error) {
 
 	tx, err := database.DB.Begin(ctx)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	defer tx.Rollback(ctx)
 
 	// validate type
 	if req.Type != "income" && req.Type != "expense" {
-		return 0, errors.New("invalid type")
+		return nil, errors.New("invalid type")
 	}
 
 	//manage createat
@@ -57,7 +57,12 @@ func (s *TransactionService) CreateTransaction(
 		createdAt,
 	)
 	if err != nil {
-		return 0, err
+		return nil, err
+	}
+
+	txData, err := s.repo.GetByID(ctx, tx, id)
+	if err != nil {
+		return nil, err
 	}
 
 	// calculate balance change
@@ -68,15 +73,15 @@ func (s *TransactionService) CreateTransaction(
 
 	// update wallet
 	if err := s.repo.UpdateWalletBalance(ctx, tx, req.WalletID, amount); err != nil {
-		return 0, err
+		return nil, err
 	}
 
 	// commit
 	if err := tx.Commit(ctx); err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return id, nil
+	return &txData, nil
 }
 
 func (s *TransactionService) GetTransactions(ctx context.Context) ([]dto.TransactionResponse, error) {

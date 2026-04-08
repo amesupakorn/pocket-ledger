@@ -30,14 +30,14 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 
 	userID := int64(1) // mock
 
-	id, err := h.service.CreateTransaction(c.Request.Context(), userID, req)
+	data, err := h.service.CreateTransaction(c.Request.Context(), userID, req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id":      id,
+		"data":    data,
 		"message": "created",
 	})
 }

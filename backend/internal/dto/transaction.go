@@ -12,12 +12,13 @@ type CreateTransactionRequest struct {
 }
 
 type TransactionResponse struct {
-	ID        int64     `json:"id"`
-	WalletID  int64     `json:"wallet_id"`
-	Amount    float64   `json:"amount"`
-	Type      string    `json:"type"`
-	Note      string    `json:"note"`
-	CreatedAt time.Time `json:"created_at"`
+	ID          int64     `json:"id"`
+	WalletID    int64     `json:"wallet_id"`
+	Amount      float64   `json:"amount"`
+	Type        string    `json:"type"`
+	Note        string    `json:"note"`
+	CreatedAt   time.Time `json:"created_at"`
+	CategoryKey string    `json:"category_key"`
 }
 
 type UpdateTransactionRequest struct {
